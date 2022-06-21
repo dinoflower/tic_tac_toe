@@ -1,26 +1,33 @@
-class TicTacToe
-  attr_accessor :moves_made, :board
-  @@moves_made = {}
-  #WIN_CONDITIONS = [{:player => "X", :results => [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 5, 9], [3, 5, 7], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}, {:player => "O", :results => [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 5, 9], [3, 5, 7], [1, 4, 7], [2, 5, 8], [3, 6, 9]]}]
+class Game #TicTacToe is too long to write
+  WIN_CONS = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 5, 9], [3, 5, 7], [1, 4, 7], [2, 5, 8], [3, 6, 9]]
+  attr_reader :board, :moves_made
   def initialize
     @board = [["_", "_", "_"], ["_", "_", "_"], ["_", "_", "_"]]
-    @player = 0
+    @players = [Player.new, PLayer.new]
     @location = 0
+    @moves_made = {}
     display_board
   end
+
   def display_board
-    board.each { |row| puts row.to_s}
+    @board.each { |row| puts row.to_s}
   end
-  def display_moves
-    p @@moves_made
+end
+
+class Player
+  attr_reader :symbol
+  def initialize(symbol)
+    @symbol = symbol
   end
+
   def play(player, location)
-    unless @@moves_made.key?(location)
-      @@moves_made[location] = player
+    unless @moves_made.key?(location)
+      @moves_made[location] = player
       convert_location(player, location)
     end
     display_board
   end
+
   def convert_location(player, location)
     case location
     when 1
@@ -44,6 +51,3 @@ class TicTacToe
     end
   end
 end
-
-# win conditions are all "X" or all "O" in 123, 456, 789, 159, 357, 147, 258, or 369
-# class for game with win conditions - TicTacToe.new creates a new game
