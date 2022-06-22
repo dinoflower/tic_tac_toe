@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# playable TicTacToe game
 module TicTacToe
   # one game of tic-tac-toe
   class Game
@@ -11,7 +12,7 @@ module TicTacToe
     attr_reader :board, :moves_made
 
     def initialize(player1, player2)
-      @board = Array.new(9) { @board.fill('_', (0...8)) }
+      @board = Array.new(9) { '  ' }
       @players = [player1.new(self, 'X'), player2.new(self, 'O')]
       @moves_made = {}
       @winner = 0
@@ -23,7 +24,7 @@ module TicTacToe
     def play_game
       if @winner != 0
         puts "Congratulations, #{@winner.symbol}! Play again?"
-      elsif !@board.include?('_')
+      elsif !@board.include?('  ')
         puts 'We have a tie! Play again?'
       else
         puts "#{@current_player.symbol}, make your move (type a number)."
@@ -32,8 +33,12 @@ module TicTacToe
     end
 
     def display_board
-      rows = @board.each { |row| row.join('|') }
-      print rows
+      row_one = @board[0, 3].join('|')
+      row_two = @board[3, 3].join('|')
+      row_three = @board[6, 3].join('|')
+      bar = '--+--+--'
+      printer_board = "#{row_one}\n#{bar}\n#{row_two}\n#{bar}\n#{row_three}"
+      puts printer_board
     end
   end
 
@@ -47,7 +52,7 @@ module TicTacToe
     end
 
     def place_symbol(location)
-      if @board[location - 1] == '_'
+      if @board[location - 1] == '  '
         @board[location - 1] = symbol
         @moves_made[location] = symbol
       end
@@ -64,7 +69,9 @@ module TicTacToe
     end
 
     def pass_turn
-      @current_player = !@current_player
+      @current_player = !self
     end
   end
+
+  Game.new(Player, Player)
 end
