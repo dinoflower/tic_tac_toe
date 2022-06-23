@@ -8,11 +8,11 @@ module TicTacToe
       [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 5, 9],
       [3, 5, 7], [1, 4, 7], [2, 5, 8], [3, 6, 9]
     ].freeze
-    attr_accessor :current_player, :winner, :board, :moves_made
+    attr_reader :board
 
-    def initialize(player1, player2)
+    def initialize(player_x, player_o)
       @board = Array.new(9) { ' ' }
-      @players = [player1.new(self, 'X'), player2.new(self, 'O')]
+      @players = [player_x.new(self, 'X'), player_o.new(self, 'O')]
       @moves_made = {}
       @winner = ''
       display_board
@@ -43,13 +43,13 @@ module TicTacToe
 
     def place_symbol(player)
       player.make_play
-      display_board
       check_winners
       @current_player = pass_turn
     end
 
     def store_data(selection)
       @board[selection - 1] = @current_player.symbol
+      display_board
       @moves_made[selection] = @current_player.symbol
     end
 
@@ -61,11 +61,7 @@ module TicTacToe
     end
 
     def pass_turn
-      if @current_player == @players[0]
-        @players[1]
-      else
-        @players[0]
-      end
+      @current_player == @players[0] ? @players[1] : @players[0]
     end
   end
 
@@ -82,11 +78,12 @@ module TicTacToe
       selection = gets.chomp.to_i
       if @game.board[selection - 1] == ' '
         @game.store_data(selection)
-        # pass_turn should go here
       elsif @game.board[selection - 1] != ' '
-        puts 'That space is taken! Please choose another.' # currently changes whose turn it is
+        puts 'That space is taken! Please choose another.'
+        make_play
       else
         puts '...'
+        make_play
       end
     end
   end
